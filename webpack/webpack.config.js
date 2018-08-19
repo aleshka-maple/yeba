@@ -1,23 +1,25 @@
+const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-
-const options = {};
+const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
 
 const argv = {
-    production: options.production || process.env.NODE_ENV === 'production' || false,
-    logging: options.logging || false,
-    stats: options.stats || false,
-    buildNumber: options.buildNumber || 'local',
-    maxThreads: parseInt(options.maxThreads) || false,
+    production: process.env.NODE_ENV === 'production' || false,
+    logging: process.env.logging || false,
+    stats: process.env.stats || false,
+    buildNumber: process.env.buildNumber || 'local',
     watch: process.argv.indexOf('--watch') !== -1
 };
 
 module.exports = {
-    entry: "./src/index.tsx",
+    entry: {
+        content: path.resolve('./src/content/content.ts'),
+        devtools: path.resolve('./src/devtools/devtools.tsx'),
+    },
     output: {
         filename: '[name].js',
-        path: __dirname + "/dist"
+        path: path.resolve('./dist')
     },
 
     devtool: "source-map",
@@ -46,23 +48,25 @@ module.exports = {
         ]
     },
 
-    watch: true,
+    watch: argv.watch,
 
     plugins: [
         new CopyWebpackPlugin([
             {
-                from: './**/dll.js', to: './dll', context: './webpack/dll'
-            },
-            /** Копируем в dist, т.к. загрузка index.html происходит из той же папки что и manifest.json */
-            {
-                from: './extension'
+                from: path.resolve('./src/manifest')
             }
         ]),
         new HtmlWebpackPlugin({
-            template: './webpack/index.html'
+            inject: true,
+            chunks: ['devtools'],
+            filename: 'devtools.html'
+        }),
+        new AddAssetHtmlPlugin({
+            filepath: path.resolve('./webpack/dll/build/*.dll.js'),
+            includeSourcemap: false
         }),
         new webpack.DllReferencePlugin({
-            manifest: require('./webpack/dll/vendors/manifest.json')
+            manifest: require('./dll/build/vendors.manifest.json')
         }),
         new webpack.optimize.CommonsChunkPlugin({
            name: 'commonChunks'

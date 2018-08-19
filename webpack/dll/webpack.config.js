@@ -2,17 +2,17 @@ const webpack = require("webpack");
 
 module.exports = {
     entry: {
-        'vendors': [__dirname + '/config.js']
+        vendors: ['react', 'react-dom']
     },
     output: {
-        path: __dirname,
-        filename: "dll.js",
+        path: __dirname + '/build',
+        filename: "[name].dll.js",
         library: '[name]'
     },
     plugins: [
         new webpack.DllPlugin({
             name: '[name]',
-            path: 'webpack/dll/vendors/manifest.json'
+            path: __dirname + '/build/[name].manifest.json'
         }),
         new webpack.optimize.UglifyJsPlugin()
     ]

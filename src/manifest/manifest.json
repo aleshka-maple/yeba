@@ -4,7 +4,7 @@
     "version": "1.0",
     "description": "Gets information from Google.",
     "minimum_chrome_version": "10.0",
-    "devtools_page": "./devtools/devtools.html",
+    "devtools_page": "devtools.html",
     "icons": {
         "16": "icon16.png",
         "48": "icon48.png"
@@ -14,7 +14,7 @@
             "matches": ["<all_urls>"],
             "css": [],
             "run_at": "document_end",
-            "js": ["./content/jq3.min.js", "./content/content.js"]
+            "js": ["commonChunks.js", "jq3.min.js", "content.js"]
         }
     ],
     "permissions": [

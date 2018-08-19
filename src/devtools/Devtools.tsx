@@ -1,8 +1,7 @@
 import * as React from 'react';
-import styles from './bootstrap.less';
-import {map} from 'lodash';
+import styles from './devtools.less';
 
-export class Bootstrap extends React.Component {
+export class Devtools extends React.Component {
 
     state = {
         components: []
@@ -72,7 +71,7 @@ export class Bootstrap extends React.Component {
                 <h3>Жали сюда:</h3>
                 <ul>
                     {
-                        map(components, (item, index) => {
+                        components.map((item, index) => {
                             return (
                                 <li
                                     key={index}
