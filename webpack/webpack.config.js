@@ -25,7 +25,8 @@ module.exports = {
     devtool: "source-map",
 
     resolve: {
-        extensions: [".ts", ".tsx", ".js", ".json", ".less"]
+        extensions: [".ts", ".tsx", ".js", ".json", ".less"],
+        modules: [path.resolve('./src'), 'node_modules']
     },
 
     module: {
@@ -58,7 +59,7 @@ module.exports = {
         ]),
         new HtmlWebpackPlugin({
             inject: true,
-            chunks: ['devtools'],
+            chunks: ['devtools', 'commonChunks'],
             filename: 'devtools.html'
         }),
         new AddAssetHtmlPlugin({
